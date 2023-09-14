@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'reusable_card.dart';
 import 'icon_content.dart';
-
-const bottomContainerHeight = 80.0;
-const activeCardColour = Color(0xFF1e1f31);
-const inactiveCardColour = Color(0xFF111328);
-const bottomContainerColour = Color(0xFFEB1555);
+import 'constants.dart';
 enum Gender{
   male,
   female,
@@ -19,7 +15,7 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   Gender? selectedGender;
-
+  int height = 180;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +23,7 @@ class _InputPageState extends State<InputPage> {
         title: const Center(child: Text('BMI CALCULATOR')),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(child: Row(
@@ -38,7 +35,7 @@ class _InputPageState extends State<InputPage> {
                       selectedGender = Gender.male;
                     });
                   },
-                  colour: selectedGender == Gender.male ? activeCardColour:inactiveCardColour,
+                  colour: selectedGender == Gender.male ? kActiveCardColour:kInactiveCardColour,
                   cardChild: IconContent(label: 'MALE',icon: FontAwesomeIcons.mars),
                 ),
               ),
@@ -49,29 +46,80 @@ class _InputPageState extends State<InputPage> {
                         selectedGender = Gender.female;
                       });
                     },
-                    colour: selectedGender == Gender.female ? activeCardColour: inactiveCardColour,
+                    colour: selectedGender == Gender.female ? kActiveCardColour: kInactiveCardColour,
                     cardChild: IconContent(icon: FontAwesomeIcons.venus, label: 'FEMALE')),
               ),
             ],
-          )),
-          Expanded(child: Container(
-            margin: const EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-              color: activeCardColour,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),),
+          )), 
+          Expanded(child: ReusableCard(
+              colour: kActiveCardColour,
+              cardChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'HEIGHT',
+                    style: kLabelTextStyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    textBaseline: TextBaseline.alphabetic,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    children: <Widget>[
+                      Text(
+                        height.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                      Text(
+                        'CM',
+                        style: kLabelTextStyle,
+                      ),
+                    ],
+                  ),
+                  Slider(
+                    value: height.toDouble(),
+                    min: 120.0,
+                    max: 220.0,
+                    activeColor: Color(0xFFEB1555),
+                    inactiveColor: Color(0xFF8D8E98),
+                    onChanged: (double newValue){
+                      setState(() {
+                        height = newValue.toInt();
+                      });
+                    },
+                  ),
+                ],
+              ), onPress: () {  },
+          ),
+          ),
           Expanded(child: Row(
             children: <Widget>[
-              Expanded(child: ReusableCard(onPress: (){}, colour: activeCardColour,cardChild: IconContent(label: 'MALE',icon: FontAwesomeIcons.mars),)),
-              Expanded(child: ReusableCard(onPress: (){},colour: activeCardColour,cardChild: IconContent(label: 'MALE',icon: FontAwesomeIcons.mars),)),
+              Expanded(
+                  child: ReusableCard(
+                    onPress: (){},
+                    colour: kActiveCardColour,
+                    cardChild: Column(
+                      children: <Widget>[
+                      ],
+                    ),
+                  ),
+              ),
+              Expanded(
+                  child: ReusableCard(
+                    onPress: (){},
+                    colour: kActiveCardColour,
+                    cardChild: Column(
+                      children: <Widget>[
+                      ],
+                    ),
+                  ),
+              ),
             ],
           )),
           Container(
-            color: bottomContainerColour,
+            color: kBottomContainerColour,
             margin: EdgeInsets.only(top: 10.0),
             width: double.infinity,
-            height: bottomContainerHeight,
+            height: kBottomContainerHeight,
           ),
         ],
       ),
